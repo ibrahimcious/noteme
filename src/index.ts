@@ -1,11 +1,11 @@
 import { Elysia, t } from "elysia";
 import { client } from "./models/client";
+import { html } from "@elysiajs/html";
+import { getTodo } from "./controller/noteController";
 
 const app = new Elysia()
-  .get("/notes", () => {
-    const allNotes = client.query("SELECT * FROM notes").all();
-    return { data: allNotes };
-  })
+  .use(html())
+  .get("/notes", getTodo)
   .post(
     "/notes",
     ({ body }) => {
