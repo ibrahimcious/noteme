@@ -1,24 +1,15 @@
 import { Elysia, t } from "elysia";
 import { client } from "./models/client";
 import { html } from "@elysiajs/html";
-import { getTodo } from "./controller/noteController";
+import { createTodo, getTodo } from "./controller/noteController";
+import { bodySchema } from "./entity/type";
 
 const app = new Elysia()
   .use(html())
   .get("/notes", getTodo)
-  .post(
-    "/notes",
-    ({ body }) => {
-      const { content } = body;
-      client.query("INSERT INTO notes (content) VALUES (?)").run(content);
-      return { message: "Note has been created" };
-    },
-    {
-      body: t.Object({
-        content: t.String(),
-      }),
-    },
-  )
+  .post("/notes", createTodo, {
+    body: bodySchema,
+  })
   .delete("/notes/:id", ({ params }) => {
     client.query("DELETE FROM notes WHERE id = ?").run(params.id);
     return { message: "Note has been deleted" };

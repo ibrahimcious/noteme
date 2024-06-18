@@ -9,7 +9,11 @@ export const Home = ({ notes }: { notes: INote[] }) => {
   return (
     <TemplateBase>
       <div>Notes : </div>
-      <div>
+      <form hx-post="/notes" hx-target="#notes" hx-swap="beforeend">
+        <textarea name="content"></textarea>
+        <button>Create note</button>
+      </form>
+      <div id="notes">
         {notes.map((note) => {
           return <div>{note.content}</div>;
         })}
